@@ -1,27 +1,12 @@
-using agent_openai_banking_assistant_csharp.Configurations;
-using agent_openai_banking_assistant_csharp.Interfaces;
-using Azure.AI.OpenAI;
-using Azure.Core;
-using Azure.Identity;
-using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Azure;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
-using OpenAI;
-
+using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.WithOrigins("http://localhost:8080", "http://localhost:8081", "http://127.0.0.1");
-    });
-});
+// @TODO: Temporary. Fix later.
+builder.Services.AddCors(options => options.AddPolicy("allowSpecificOrigins", policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
 // Configure authentication using Azure AD
 if (builder.Environment.IsDevelopment())
@@ -54,7 +39,7 @@ if (app.Environment.IsDevelopment())
     app.UseCors();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

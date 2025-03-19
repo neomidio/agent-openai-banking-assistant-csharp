@@ -19,8 +19,12 @@
     public async Task StoreFile(String fileName, Stream content)
     {
         BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
+
+        // Create the container if it doesn't exist.
+        await containerClient.CreateIfNotExistsAsync();
+
         BlobClient blobClient = containerClient.GetBlobClient(fileName);
-        await blobClient.UploadAsync(content, true);
+        await blobClient.UploadAsync(content, overwrite: true);
     }
 }
 
