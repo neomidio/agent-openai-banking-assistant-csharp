@@ -1,6 +1,8 @@
 ﻿
 
+using agent_openai_banking_assistant_csharp.Agents;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.SemanticKernel;
 
 public static class ServicesExtensions
 {
@@ -37,14 +39,35 @@ public static class ServicesExtensions
         services.AddSingleton<IDocumentScanner, DocumentIntelligenceProxy>();
 
         // Register OpenAIClient.
-        services.AddSingleton<OpenAIClient>(provider =>
+        services.AddSingleton<AzureOpenAIClient>(provider =>
         {
             var endpoint = configuration["AzureOpenAPI:Endpoint"];
             var apiKey = configuration["AzureOpenAPI:ApiKey"];
             return new AzureOpenAIClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
         });
 
-        services.AddSingleton<IOpenAI, OpenAIProxy>();
+        services.AddSingleton<IntentExtractorAgent>(provider =>
+        {
+            var endpoint = configuration["AzureOpenAPI:Endpoint"];
+            var apiKey = configuration["AzureOpenAPI:ApiKey"];
+            var azureOpenAIClient = provider.GetRequiredService<AzureOpenAIClient>();
+
+            return new IntentExtractorAgent(azureOpenAIClient, configuration);
+        });
+
+        services.AddSingleton<IntentExtractorAgent>(provider =>
+        {
+            var azureOpenAIClient = provider.GetRequiredService<AzureOpenAIClient>();
+
+            return new IntentExtractorAgent(azureOpenAIClient, configuration);
+        });
+
+        services.AddSingleton<RouterAgent>(provider =>
+        {
+            var intentExtractorAgent = provider.GetRequiredService<IntentExtractorAgent>();
+
+            return new RouterAgent(intentExtractorAgent);
+        });
 
         return services;
     }

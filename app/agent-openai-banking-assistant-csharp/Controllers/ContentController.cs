@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-[Route("api/[controller]")]
+[Route("api/content")]
 [ApiController]
 [Authorize]
 public class ContentController : ControllerBase
@@ -41,19 +41,18 @@ public class ContentController : ControllerBase
     {
         if (file == null || file.Length == 0)
         {
-            _logger.LogWarning("No file uploaded.");
-            return BadRequest("No file uploaded.");
+            _logger.LogWarning("File is missing.");
+            return BadRequest("File is missing.");
         }
-
+        var fileName = Path.GetFileName(file.FileName);
 
         // Save the file locally
-        var uploadsFolder = Path.Combine(_environment.ContentRootPath, "Uploads");
+        /*var uploadsFolder = Path.Combine(_environment.ContentRootPath, "Downloads");
         if (!Directory.Exists(uploadsFolder))
         {
             Directory.CreateDirectory(uploadsFolder);
         }
 
-        var fileName = Path.GetFileName(file.FileName);
         var localFilePath = Path.Combine(uploadsFolder, fileName);
 
         try
@@ -68,6 +67,7 @@ public class ContentController : ControllerBase
             _logger.LogError(ex, "Error saving file locally.");
             return StatusCode(500, "Error saving file locally.");
         }
+        */
 
         // Upload the file to Blob Storage
         try
