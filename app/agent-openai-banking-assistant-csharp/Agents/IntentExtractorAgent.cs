@@ -10,8 +10,6 @@ namespace agent_openai_banking_assistant_csharp.Agents
     public class IntentExtractorAgent
     {
 
-        private AzureOpenAIClient _aiClient;
-
         private IChatCompletionService _chatCompletionService;
 
         private Kernel _kernel;
@@ -36,17 +34,20 @@ namespace agent_openai_banking_assistant_csharp.Agents
             
                 """;
 
-        public IntentExtractorAgent(AzureOpenAIClient client, IConfiguration configuration) 
+        public IntentExtractorAgent(IConfiguration configuration) 
         {
-            this._aiClient = client;
+            var deploymentName = configuration[key: "AzureOpenAPI:Deployment"];
+            var endpoint = configuration[key: "AzureOpenAPI:Endpoint"];
+            var apiKey = configuration[key: "AzureOpenAPI:ApiKey"];
 
-            var deploymentName = configuration.GetSection("AzureOpenAPI:Deployment").ToString();
-            var endpoint = configuration.GetSection("AzureOpenAPI:Endpoint").ToString();
-            var apiKey = configuration.GetSection("AzureOpenAPI:ApiKey").ToString();
 
-            IKernelBuilder kernelBuilder = Kernel.CreateBuilder().AddAzureOpenAIChatCompletion(deploymentName, endpoint, apiKey);
-            this._kernel = kernelBuilder.Build();
-            this._chatCompletionService = this._kernel.GetRequiredService<AzureOpenAIChatCompletionService>();
+            Console.WriteLine($"Instantiating AzureOpenAIChatCompletion: {deploymentName} {endpoint}");
+
+            IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
+            kernelBuilder.AddAzureOpenAIChatCompletion(deploymentName: deploymentName, endpoint:endpoint, apiKey:apiKey);
+            Kernel kernel = kernelBuilder.Build();
+            this._chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
+            this._kernel = kernel;
         }
 
         public async Task<IntentResponse> Run(ChatHistory userChatHistory)

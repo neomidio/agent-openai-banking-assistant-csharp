@@ -48,18 +48,7 @@ public static class ServicesExtensions
 
         services.AddSingleton<IntentExtractorAgent>(provider =>
         {
-            var endpoint = configuration["AzureOpenAPI:Endpoint"];
-            var apiKey = configuration["AzureOpenAPI:ApiKey"];
-            var azureOpenAIClient = provider.GetRequiredService<AzureOpenAIClient>();
-
-            return new IntentExtractorAgent(azureOpenAIClient, configuration);
-        });
-
-        services.AddSingleton<IntentExtractorAgent>(provider =>
-        {
-            var azureOpenAIClient = provider.GetRequiredService<AzureOpenAIClient>();
-
-            return new IntentExtractorAgent(azureOpenAIClient, configuration);
+            return new IntentExtractorAgent(configuration);
         });
 
         services.AddSingleton<RouterAgent>(provider =>

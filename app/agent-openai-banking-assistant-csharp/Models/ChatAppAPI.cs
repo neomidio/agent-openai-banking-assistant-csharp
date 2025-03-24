@@ -1,7 +1,7 @@
 ﻿using Microsoft.SemanticKernel.ChatCompletion;
 using System.Text.Json.Serialization;
 
-public record ResponseMessage( string Content, string Role, List<string> Attachments);
+public record ResponseMessage( string Content, string Role, List<string>? Attachments);
 
 public record ChatAppRequestOverrides(
     bool? SemanticRanker,
