@@ -10,12 +10,14 @@ public class AgenticRouter
 {
     private IntentExtractorAgent _intentExtractorAgent;
     private PaymentAgent _paymentAgent;
+    private TransactionsReportingAgent _transactionsReportingAgent;
     private Kernel _kernel;
     public AgenticRouter(Kernel kernel, IConfiguration configuration, IDocumentScanner documentScanner)
     {
         this._kernel = kernel;
         this._intentExtractorAgent = new IntentExtractorAgent(kernel, configuration);
         this._paymentAgent = new PaymentAgent(kernel, configuration, documentScanner);
+        this._transactionsReportingAgent = new TransactionsReportingAgent(kernel, configuration);
     }
 #pragma warning disable SKEXP0110 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     public async Task Run(ChatHistory chatHistory, AgentContext agentContext)
@@ -25,14 +27,6 @@ public class AgenticRouter
         IntentResponse intentResponse = this._intentExtractorAgent.Run(chatHistory).Result;
         Console.WriteLine($"Intent Type for chat conversation is {intentResponse.intentType.ToString()}");
 
-        ChatCompletionAgent clarifyingAgent =
-        new()
-        {
-            Name = "ClarifyingAgent",
-            Instructions = "You are a personal financial advisor who help bank customers manage their banking accounts and services.\r\nThe user may need help with his recurrent bill payments, it may start the payment checking payments history for a specific payee.\r\nIn other cases it may want to just review account details or transactions history.\r\nBased on the conversation you need to identify the user intent.\r\nThe available intents are:\r\n\"BillPayment\",\"RepeatTransaction\",\"TransactionHistory\",\"AccountInfo\"\r\nIf none of the intents are identified provide the user with the list of the available intents. If you don't understand or if an intent is not identified be polite with the user, ask clarifying question also using the list of the available intents..\r\n",
-            Kernel = this._kernel
-        };
-
 
         KernelFunction selectionFunction =
         AgentGroupChat.CreatePromptFunctionForStrategy(
@@ -41,7 +35,6 @@ public class AgenticRouter
             State only the name of the participant to take the next turn.
 
             Choose only from these participants:
-            - 'ClarifyingAgent' for: None
             - 'PaymentAgent' for: BillPayment, RepeatTransaction
             - 'AccountAgent' for: AccountInfo
             - 'TransactionsReportingAgent' for: TransactionHistory
@@ -75,18 +68,18 @@ public class AgenticRouter
               ResultParser = (result) => result.GetValue<string>() ?? "",
               HistoryVariableName = "history",
               // Save tokens by not including the entire history in the prompt
-              HistoryReducer = new ChatHistoryTruncationReducer(41),
+              HistoryReducer = new ChatHistoryTruncationReducer(4),
           };
         // Create a chat using the defined selection strategy.
         KernelFunctionTerminationStrategy terminationStrategy =
             new(terminationFunction, this._kernel)
             {
                 // Save tokens by only including the final response
-                HistoryReducer = new ChatHistoryTruncationReducer(1),
+                HistoryReducer = new ChatHistoryTruncationReducer(3),
                 // The prompt variable name for the history argument.
                 HistoryVariableName = "history",
                 // Limit total number of turns
-                MaximumIterations = 3,
+                MaximumIterations = 1,
                 // Customer result parser to determine if the response is "yes"
                 ResultParser = (result) => result.GetValue<string>()?.Contains("yes", StringComparison.OrdinalIgnoreCase) ?? false
             };
@@ -94,7 +87,7 @@ public class AgenticRouter
 
 
         AgentGroupChat chat =
-            new(this._paymentAgent.agent, clarifyingAgent)
+            new(this._paymentAgent.agent, this._transactionsReportingAgent.agent)
             {
                 ExecutionSettings = new() { SelectionStrategy = selectionStrategy, TerminationStrategy = terminationStrategy }
             };

@@ -2,10 +2,12 @@
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
-public class PaymentAgent
+
+
+public class TransactionsReportingAgent
 {
     public ChatCompletionAgent agent;
-    public PaymentAgent(Kernel kernel, IConfiguration configuration, IDocumentScanner documentScanner)
+    public TransactionsReportingAgent(Kernel kernel, IConfiguration configuration)
     {
         Kernel toolKernel = kernel.Clone();
 
@@ -27,25 +29,17 @@ public class PaymentAgent
            apiUrl: accountsApiURL
         );
 
-        AgenticUtils.AddOpenAPIPlugin(
-           kernel: toolKernel,
-           pluginName: "PaymentsPlugin",
-           apiName: "payments",
-           apiUrl: paymentsApiURL
-        );
-
-        toolKernel.Plugins.AddFromObject(new InvoiceScanPlugin(documentScanner), "InvoiceScanPlugin");
-       
         this.agent =
         new()
         {
-            Name = "PaymentAgent",
-            Instructions = AgentInstructions.PaymentAgentInstructions,
+            Name = "TransactionsReportingAgent",
+            Instructions = AgentInstructions.TransactionsReportingAgentInstructions,
             Kernel = toolKernel,
             Arguments =
             new KernelArguments(
-                new AzureOpenAIPromptExecutionSettings(){ FunctionChoiceBehavior = FunctionChoiceBehavior.Auto() }
+                new AzureOpenAIPromptExecutionSettings() { FunctionChoiceBehavior = FunctionChoiceBehavior.Auto() }
             )
         };
     }
 }
+

@@ -16,11 +16,9 @@
      Use HTML list or table to display bill extracted data, payments, account or transaction details.
      Always use the below logged user details to retrieve account info:
      {{$user}}
-     Current timestamp: {{$now}}.
+     
      Don't try to guess accountId,paymentMethodId from the conversation.When submitting payment always use functions to retrieve accountId, paymentMethodId.
      
-     Before executing a function call, check data in below function calls cache:
-     {{cache}}
      """;
 
         public static string TransactionsReportingAgentInstructions = $$$"""
@@ -28,12 +26,9 @@
     If the user doesn't provide the payee name, search the last 10 transactions order by date.
     If the user want to search last transactions for a specific payee, ask to provide the payee name.
     Use html list or table to display the transaction information.
+
     Always use the below logged user details to search the transactions:
     {{$user}}
-    Current timestamp: {{$now}}.
-    
-    Before executing a function call, check data in below function calls cache:
-     {{cache}}
     """;
     
 
@@ -42,9 +37,5 @@
      Use html list or table to display the account information.
      Always use the below logged user details to retrieve account info:
     {{$user}}
-    Current timestamp: {{$now}}.
-     
-     Before executing a function call, check data in below function calls cache:
-     {{cache}}
     """;
 }
