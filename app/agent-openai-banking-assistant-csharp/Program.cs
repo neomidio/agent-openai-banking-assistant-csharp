@@ -27,7 +27,6 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddSingleton<ILoggerFactory>(LoggerFactory.Create(builder => builder.AddConsole()));
 
-
 // Use the custom extension method to register azure services.
 builder.Services.AddAzureServices(builder.Configuration);
 

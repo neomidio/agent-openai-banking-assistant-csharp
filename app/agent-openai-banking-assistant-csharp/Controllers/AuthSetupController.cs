@@ -8,9 +8,6 @@ public class AuthSetupController : ControllerBase
     [HttpGet]
     public IActionResult Index()
     {
-        return Ok(@"
-        {
-            ""useLogin"": false
-        }");
+        return Ok(new { UseLogin = false });
     }
 }

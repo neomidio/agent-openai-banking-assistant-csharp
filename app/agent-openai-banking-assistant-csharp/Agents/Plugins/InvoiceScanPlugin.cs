@@ -1,16 +1,17 @@
 ﻿using agent_openai_banking_assistant_csharp.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 public class InvoiceScanPlugin
 {
     private readonly ILogger<InvoiceScanPlugin> _logger;
     private IDocumentScanner _documentScanner;
-    public InvoiceScanPlugin(IDocumentScanner documentScanner, ILogger<InvoiceScanPlugin> _logger)
+    public InvoiceScanPlugin(IDocumentScanner documentScanner, ILogger<InvoiceScanPlugin> logger)
     {
         _documentScanner = documentScanner;
-        _logger = _logger;
+        _logger = logger;
     }
     [KernelFunction("scanInvoice")]
     [Description("Extract the invoice or bill data scanning a photo or image")]
@@ -27,7 +28,7 @@ public class InvoiceScanPlugin
         }
 
         _logger.LogInformation($"SK scanInvoice plugin: Data extracted {filePath}:{scanData}");
-        return scanData.ToString();
+        return JsonSerializer.Serialize(scanData);
     }
 }
 

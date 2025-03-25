@@ -1,21 +1,26 @@
 ﻿
+using Microsoft.Extensions.Logging;
+
 public class DocumentIntelligenceProxy : IDocumentScanner
 {
     private readonly IBlobStorage _blobStorageProxy;
 
     private readonly DocumentIntelligenceClient _documentIntelligenceClient;
 
+    private ILogger _logger;
 
-    public DocumentIntelligenceProxy(IBlobStorage blobStorageProxy, DocumentIntelligenceClient documentIntelligenceClient)
+
+    public DocumentIntelligenceProxy(IBlobStorage blobStorageProxy, DocumentIntelligenceClient documentIntelligenceClient, ILoggerFactory loggerFactory)
     {
         _blobStorageProxy = blobStorageProxy;
         _documentIntelligenceClient = documentIntelligenceClient;
+        _logger = loggerFactory.CreateLogger<DocumentIntelligenceProxy>();
     }
 
     public Dictionary<string, string> Scan(string fileName)
     {
         Uri uriSource = _blobStorageProxy.GetFileUri(fileName);
-
+        _logger.LogInformation($"Scanning: {uriSource.ToString()}");
         string modelId = "prebuilt-invoice";
         Operation<AnalyzeResult> operation = _documentIntelligenceClient.AnalyzeDocument(WaitUntil.Completed, modelId, uriSource);
         AnalyzeResult result = operation.Value;
@@ -57,7 +62,7 @@ public class DocumentIntelligenceProxy : IDocumentScanner
                 scanData.Add("InvoiceDate", invoiceDateField.ValueString);
             }
             if (analyzedInvoice.Fields.TryGetValue("InvoiceTotal", out DocumentField invoiceTotalField)
-                && invoiceTotalField.FieldType == DocumentFieldType.Double)
+                && invoiceTotalField.FieldType == DocumentFieldType.String)
             {
                 scanData.Add("InvoiceTotal", invoiceTotalField.ValueString);
             }

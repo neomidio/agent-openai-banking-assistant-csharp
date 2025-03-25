@@ -11,7 +11,7 @@ public class AgenticRouter
     public AgenticRouter(Kernel kernel, IConfiguration configuration, IDocumentScanner documentScanner, ILoggerFactory loggerFactory)
     {
         _kernel = kernel;
-        _intentExtractorAgent = new IntentExtractorAgent(kernel, configuration);
+        _intentExtractorAgent = new IntentExtractorAgent(kernel, configuration, loggerFactory.CreateLogger<IntentExtractorAgent>());
         _paymentAgent = new PaymentAgent(kernel, configuration, documentScanner, loggerFactory);
         _transactionsReportingAgent = new TransactionsReportingAgent(kernel, configuration);
         _logger = loggerFactory.CreateLogger<AgenticRouter>();
@@ -95,21 +95,20 @@ public class AgenticRouter
             await foreach (ChatMessageContent response in chat.InvokeAsync())
             {
 
-                Console.WriteLine();
-                Console.WriteLine($"{response.AuthorName.ToUpperInvariant()}:{Environment.NewLine}{response.Content}");
+                _logger.LogInformation($"{response.AuthorName.ToUpperInvariant()}:{Environment.NewLine}{response.Content}");
                 chatHistory.AddAssistantMessage(response.Content);
              
             }
         }
         catch (HttpOperationException exception)
         {
-            Console.WriteLine(exception.Message);
+            _logger.LogError(exception.Message);
             if (exception.InnerException != null)
             {
-                Console.WriteLine(exception.InnerException.Message);
+                _logger.LogError(exception.InnerException.Message);
                 if (exception.InnerException.Data.Count > 0)
                 {
-                    Console.WriteLine(JsonSerializer.Serialize(exception.InnerException.Data, new JsonSerializerOptions() { WriteIndented = true }));
+                    _logger.LogError(JsonSerializer.Serialize(exception.InnerException.Data, new JsonSerializerOptions() { WriteIndented = true }));
                 }
             }
         }

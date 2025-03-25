@@ -5,6 +5,8 @@
 
     private Kernel _kernel;
 
+    private ILogger _logger;
+
 
     private string INTENT_SYSTEM_MESSAGE = $$$"""
             You are a personal financial advisor who help bank customers manage their banking accounts and services.
@@ -25,10 +27,11 @@
             
             """;
 
-    public IntentExtractorAgent(Kernel kernel, IConfiguration configuration) 
+    public IntentExtractorAgent(Kernel kernel, IConfiguration configuration, ILogger logger) 
     {
         _chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
         _kernel = kernel;
+        _logger = logger;
     }
 
     public async Task<IntentResponse> Run(ChatHistory userChatHistory)
@@ -42,7 +45,7 @@
         ChatMessageContent results = await _chatCompletionService.GetChatMessageContentAsync(chatHistory: agentchatHistory, kernel: _kernel);
         var content = results.Content;
         JsonDocument jsonData;
-        Console.WriteLine($"Intent Extractor Response: {content}");
+        _logger.LogInformation($"Intent Extractor Response: {content}");
 
         /**
         * Try to see if the model answered with a formatted json. If not it is just trying to keep the conversation going to understand the user intent
@@ -55,7 +58,7 @@
         }
         catch (JsonException ex)
         {
-            Console.Write(ex.ToString());
+            _logger.LogError(ex.ToString());
             return new IntentResponse(IntentType.None, content);
         }
 
