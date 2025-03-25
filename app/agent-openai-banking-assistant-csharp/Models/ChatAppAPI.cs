@@ -36,7 +36,7 @@ public record ResponseContext(string Thoughts, List<string> DataPoints);
 
 public class ChatResponse
 {
-    public List<ResponseChoice> Choices;
+    public List<ResponseChoice> Choices { get; set; }
 
     public ChatResponse(List<ResponseChoice> Choices)
     {

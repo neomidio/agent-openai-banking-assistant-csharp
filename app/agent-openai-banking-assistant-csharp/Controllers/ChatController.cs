@@ -9,12 +9,12 @@ public class ChatController : ControllerBase
 {
     private readonly ILogger<ChatController> _logger;
 
-    private RouterAgent _routerAgent;
+    private AgenticRouter _agenticRouter;
 
-    public ChatController(ILogger<ChatController> logger, RouterAgent routerAgent)
+    public ChatController(ILogger<ChatController> logger, AgenticRouter agenticRouter)
     {
         _logger = logger;
-        this._routerAgent = routerAgent;
+        this._agenticRouter = agenticRouter;
     }
 
     [HttpGet]
@@ -24,6 +24,7 @@ public class ChatController : ControllerBase
     }
 
     [HttpPost]
+    [Produces("application/json")]
     public IActionResult ChatWithOpenAI([FromBody] ChatAppRequest chatRequest)
     {
         if (!ModelState.IsValid)
@@ -56,9 +57,10 @@ public class ChatController : ControllerBase
         agentContext.Add("attachments", chatRequest.Attachments);
         agentContext.Add("approach", chatRequest.Approach);
 
-        this._routerAgent.Run(chatHistory, agentContext);
+        this._agenticRouter.Run(chatHistory, agentContext).Wait();
 
-        return Ok(ChatResponse.BuildChatResponse(chatHistory, agentContext));
+        ChatResponse response = ChatResponse.BuildChatResponse(chatHistory, agentContext);
+        return new JsonResult(response);
     }
 
     private ChatHistory ConvertSKChatHistory(ChatAppRequest chatAppRequest)

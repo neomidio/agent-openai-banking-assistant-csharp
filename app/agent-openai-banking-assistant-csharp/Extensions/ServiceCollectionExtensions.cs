@@ -1,6 +1,7 @@
 ﻿
 
 using agent_openai_banking_assistant_csharp.Agents;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 
@@ -46,16 +47,24 @@ public static class ServicesExtensions
             return new AzureOpenAIClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
         });
 
-        services.AddSingleton<IntentExtractorAgent>(provider =>
+        services.AddSingleton<Kernel>(provider =>
         {
-            return new IntentExtractorAgent(configuration);
+            var deploymentName = configuration[key: "AzureOpenAPI:Deployment"];
+            var endpoint = configuration[key: "AzureOpenAPI:Endpoint"];
+            var apiKey = configuration[key: "AzureOpenAPI:ApiKey"];
+
+            IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
+            kernelBuilder.AddAzureOpenAIChatCompletion(deploymentName: deploymentName, endpoint: endpoint, apiKey: apiKey);
+            return kernelBuilder.Build();
         });
 
-        services.AddSingleton<RouterAgent>(provider =>
-        {
-            var intentExtractorAgent = provider.GetRequiredService<IntentExtractorAgent>();
 
-            return new RouterAgent(intentExtractorAgent);
+        services.AddSingleton<AgenticRouter>(provider =>
+        {
+            var kernel = provider.GetRequiredService<Kernel>();
+            var documentScanner = provider.GetRequiredService<IDocumentScanner>();
+
+            return new AgenticRouter(kernel, configuration, documentScanner);
         });
 
         return services;

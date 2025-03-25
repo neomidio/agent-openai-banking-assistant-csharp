@@ -34,18 +34,8 @@ namespace agent_openai_banking_assistant_csharp.Agents
             
                 """;
 
-        public IntentExtractorAgent(IConfiguration configuration) 
+        public IntentExtractorAgent(Kernel kernel, IConfiguration configuration) 
         {
-            var deploymentName = configuration[key: "AzureOpenAPI:Deployment"];
-            var endpoint = configuration[key: "AzureOpenAPI:Endpoint"];
-            var apiKey = configuration[key: "AzureOpenAPI:ApiKey"];
-
-
-            Console.WriteLine($"Instantiating AzureOpenAIChatCompletion: {deploymentName} {endpoint}");
-
-            IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
-            kernelBuilder.AddAzureOpenAIChatCompletion(deploymentName: deploymentName, endpoint:endpoint, apiKey:apiKey);
-            Kernel kernel = kernelBuilder.Build();
             this._chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
             this._kernel = kernel;
         }
@@ -60,6 +50,7 @@ namespace agent_openai_banking_assistant_csharp.Agents
             ChatMessageContent results = await this._chatCompletionService.GetChatMessageContentAsync(chatHistory: agentchatHistory, kernel: this._kernel);
             var content = results.Content;
             JsonDocument jsonData;
+            Console.WriteLine($"Intent Extractor Response: {content}");
 
             /**
             * Try to see if the model answered with a formatted json. If not it is just trying to keep the conversation going to understand the user intent

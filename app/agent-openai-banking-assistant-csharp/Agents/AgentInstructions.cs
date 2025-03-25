@@ -15,8 +15,8 @@
      If the payment succeeds provide the user with the payment confirmation. If not provide the user with the error message.
      Use HTML list or table to display bill extracted data, payments, account or transaction details.
      Always use the below logged user details to retrieve account info:
-     {{user}}
-     Current timestamp: {{date}}
+     {{$user}}
+     Current timestamp: {{$now}}.
      Don't try to guess accountId,paymentMethodId from the conversation.When submitting payment always use functions to retrieve accountId, paymentMethodId.
      
      Before executing a function call, check data in below function calls cache:
@@ -29,8 +29,8 @@
     If the user want to search last transactions for a specific payee, ask to provide the payee name.
     Use html list or table to display the transaction information.
     Always use the below logged user details to search the transactions:
-    {{user}}
-    Current timestamp: {{date}}
+    {{$user}}
+    Current timestamp: {{$now}}.
     
     Before executing a function call, check data in below function calls cache:
      {{cache}}
@@ -41,7 +41,8 @@
      you are a personal financial advisor who help the user to retrieve information about their bank accounts.
      Use html list or table to display the account information.
      Always use the below logged user details to retrieve account info:
-    {{user}}
+    {{$user}}
+    Current timestamp: {{$now}}.
      
      Before executing a function call, check data in below function calls cache:
      {{cache}}
