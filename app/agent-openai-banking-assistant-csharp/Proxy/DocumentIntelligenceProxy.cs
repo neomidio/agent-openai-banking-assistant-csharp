@@ -14,9 +14,10 @@ public class DocumentIntelligenceProxy : IDocumentScanner
 
     public Dictionary<string, string> Scan(string fileName)
     {
-        Uri uriSource = new Uri(fileName);
+        Uri uriSource = _blobStorageProxy.GetFileUri(fileName);
+
         string modelId = "prebuilt-invoice";
-        Operation<AnalyzeResult> operation = this._documentIntelligenceClient.AnalyzeDocument(WaitUntil.Completed, modelId, uriSource);
+        Operation<AnalyzeResult> operation = _documentIntelligenceClient.AnalyzeDocument(WaitUntil.Completed, modelId, uriSource);
         AnalyzeResult result = operation.Value;
 
         Dictionary<string, string> scanData = new Dictionary<string, string>();
@@ -51,12 +52,12 @@ public class DocumentIntelligenceProxy : IDocumentScanner
                 scanData.Add("InvoiceId", invoiceIdField.ValueString);
             }
             if (analyzedInvoice.Fields.TryGetValue("InvoiceDate", out DocumentField invoiceDateField)
-                && invoiceIdField.FieldType == DocumentFieldType.Date)
+                && invoiceDateField.FieldType == DocumentFieldType.Date)
             {
                 scanData.Add("InvoiceDate", invoiceDateField.ValueString);
             }
             if (analyzedInvoice.Fields.TryGetValue("InvoiceTotal", out DocumentField invoiceTotalField)
-                && invoiceIdField.FieldType == DocumentFieldType.Double)
+                && invoiceTotalField.FieldType == DocumentFieldType.Double)
             {
                 scanData.Add("InvoiceTotal", invoiceTotalField.ValueString);
             }

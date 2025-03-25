@@ -1,9 +1,4 @@
 ﻿
-using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.Agents;
-using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
-
-
 public class TransactionsReportingAgent
 {
     public ChatCompletionAgent agent;

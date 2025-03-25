@@ -16,6 +16,13 @@
         string blobContents = downloadResult.Content.ToString();
         return blobContents;
     }
+
+    public Uri GetFileUri(string fileName)
+    {
+        BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
+        BlobClient blobClient = containerClient.GetBlobClient(fileName);
+        return blobClient.Uri;
+    }
     public async Task StoreFile(String fileName, Stream content)
     {
         BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);

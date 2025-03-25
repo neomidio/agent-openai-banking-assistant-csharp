@@ -7,24 +7,26 @@ public class InvoiceScanPlugin
 {
     private readonly ILogger<InvoiceScanPlugin> _logger;
     private IDocumentScanner _documentScanner;
-    public InvoiceScanPlugin(IDocumentScanner documentScanner)
+    public InvoiceScanPlugin(IDocumentScanner documentScanner, ILogger<InvoiceScanPlugin> _logger)
     {
-        this._documentScanner = documentScanner;
+        _documentScanner = documentScanner;
+        _logger = _logger;
     }
     [KernelFunction("scanInvoice")]
     [Description("Extract the invoice or bill data scanning a photo or image")]
     public string ScanInvoice([DescriptionAttribute("the path to the file containing the image or photo")] string filePath) {
 
         Dictionary<string, string> scanData = null;
+        _logger.LogInformation($"Attempting to scan: {filePath}");
 
         try{
-            scanData = this._documentScanner.Scan(filePath);
+            scanData = _documentScanner.Scan(filePath);
         } catch (Exception e) {
-          this._logger.LogError($"Error extracting data from invoice {filePath}: {e.ToString()}");
+          _logger.LogError($"Error extracting data from invoice {filePath}: {e.ToString()}");
             scanData = new();
         }
 
-        this._logger.LogInformation($"SK scanInvoice plugin: Data extracted {filePath}:{scanData}");
+        _logger.LogInformation($"SK scanInvoice plugin: Data extracted {filePath}:{scanData}");
         return scanData.ToString();
     }
 }

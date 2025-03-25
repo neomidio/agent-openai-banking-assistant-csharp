@@ -1,14 +1,8 @@
-﻿
-
-using agent_openai_banking_assistant_csharp.Agents;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.SemanticKernel;
-
-public static class ServicesExtensions
+﻿public static class ServicesExtensions
 {
     public static IServiceCollection AddAzureServices(this IServiceCollection services, IConfiguration configuration)
     {
+        
         // Register Azure Blob Service Client via the Azure Clients builder.
         services.AddSingleton<BlobServiceClient>(provider =>
         {
@@ -63,8 +57,8 @@ public static class ServicesExtensions
         {
             var kernel = provider.GetRequiredService<Kernel>();
             var documentScanner = provider.GetRequiredService<IDocumentScanner>();
-
-            return new AgenticRouter(kernel, configuration, documentScanner);
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new AgenticRouter(kernel, configuration, documentScanner, loggerFactory);
         });
 
         return services;

@@ -1,8 +1,4 @@
-﻿using agent_openai_banking_assistant_csharp.Agents;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.SemanticKernel.ChatCompletion;
-
-
+﻿
 [Route("api/chat")]
 [ApiController]
 public class ChatController : ControllerBase
@@ -14,13 +10,13 @@ public class ChatController : ControllerBase
     public ChatController(ILogger<ChatController> logger, AgenticRouter agenticRouter)
     {
         _logger = logger;
-        this._agenticRouter = agenticRouter;
+        _agenticRouter = agenticRouter;
     }
 
     [HttpGet]
     public IActionResult Index()
     {
-        return StatusCode(200, "Chat Controller is available.");
+        return Ok("Chat Controller is available.");
     }
 
     [HttpPost]
@@ -57,7 +53,7 @@ public class ChatController : ControllerBase
         agentContext.Add("attachments", chatRequest.Attachments);
         agentContext.Add("approach", chatRequest.Approach);
 
-        this._agenticRouter.Run(chatHistory, agentContext).Wait();
+        _agenticRouter.Run(chatHistory, agentContext).Wait();
 
         ChatResponse response = ChatResponse.BuildChatResponse(chatHistory, agentContext);
         return new JsonResult(response);

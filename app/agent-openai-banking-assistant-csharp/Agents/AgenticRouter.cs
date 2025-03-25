@@ -1,31 +1,28 @@
-﻿using agent_openai_banking_assistant_csharp.Agents;
-using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.Agents;
-using Microsoft.SemanticKernel.Agents.Chat;
-using Microsoft.SemanticKernel.ChatCompletion;
-using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
-using System.Text.Json;
+﻿
+using Microsoft.Extensions.Logging;
 
 public class AgenticRouter
 {
+    private ILogger<AgenticRouter> _logger;
     private IntentExtractorAgent _intentExtractorAgent;
     private PaymentAgent _paymentAgent;
     private TransactionsReportingAgent _transactionsReportingAgent;
     private Kernel _kernel;
-    public AgenticRouter(Kernel kernel, IConfiguration configuration, IDocumentScanner documentScanner)
+    public AgenticRouter(Kernel kernel, IConfiguration configuration, IDocumentScanner documentScanner, ILoggerFactory loggerFactory)
     {
-        this._kernel = kernel;
-        this._intentExtractorAgent = new IntentExtractorAgent(kernel, configuration);
-        this._paymentAgent = new PaymentAgent(kernel, configuration, documentScanner);
-        this._transactionsReportingAgent = new TransactionsReportingAgent(kernel, configuration);
+        _kernel = kernel;
+        _intentExtractorAgent = new IntentExtractorAgent(kernel, configuration);
+        _paymentAgent = new PaymentAgent(kernel, configuration, documentScanner, loggerFactory);
+        _transactionsReportingAgent = new TransactionsReportingAgent(kernel, configuration);
+        _logger = loggerFactory.CreateLogger<AgenticRouter>();
     }
 #pragma warning disable SKEXP0110 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     public async Task Run(ChatHistory chatHistory, AgentContext agentContext)
     {
-        Console.WriteLine("======== Router Agent: Starting ========");
-        Console.WriteLine(chatHistory[chatHistory.Count - 1].Content);
-        IntentResponse intentResponse = this._intentExtractorAgent.Run(chatHistory).Result;
-        Console.WriteLine($"Intent Type for chat conversation is {intentResponse.intentType.ToString()}");
+        _logger.LogInformation("======== Router Agent: Starting ========");
+        _logger.LogInformation(chatHistory[chatHistory.Count - 1].Content);
+        IntentResponse intentResponse = _intentExtractorAgent.Run(chatHistory).Result;
+        _logger.LogInformation($"Intent Type for chat conversation is {intentResponse.intentType.ToString()}");
 
 
         KernelFunction selectionFunction =
@@ -60,19 +57,18 @@ public class AgenticRouter
                 safeParameterNames: "history");
 
         // Define the selection strategy
-#pragma warning disable SKEXP0001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         KernelFunctionSelectionStrategy selectionStrategy =
-          new(selectionFunction, this._kernel)
+          new(selectionFunction, _kernel)
           {   
               // Parse the function response.
               ResultParser = (result) => result.GetValue<string>() ?? "",
               HistoryVariableName = "history",
               // Save tokens by not including the entire history in the prompt
-              HistoryReducer = new ChatHistoryTruncationReducer(4),
+              HistoryReducer = new ChatHistoryTruncationReducer(3),
           };
         // Create a chat using the defined selection strategy.
         KernelFunctionTerminationStrategy terminationStrategy =
-            new(terminationFunction, this._kernel)
+            new(terminationFunction, _kernel)
             {
                 // Save tokens by only including the final response
                 HistoryReducer = new ChatHistoryTruncationReducer(3),
@@ -83,14 +79,14 @@ public class AgenticRouter
                 // Customer result parser to determine if the response is "yes"
                 ResultParser = (result) => result.GetValue<string>()?.Contains("yes", StringComparison.OrdinalIgnoreCase) ?? false
             };
-        #pragma warning restore SKEXP0001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
 
         AgentGroupChat chat =
-            new(this._paymentAgent.agent, this._transactionsReportingAgent.agent)
+            new(_paymentAgent.agent, _transactionsReportingAgent.agent)
             {
                 ExecutionSettings = new() { SelectionStrategy = selectionStrategy, TerminationStrategy = terminationStrategy }
             };
+
+        chat.AddChatMessages(chatHistory);
 
         chat.IsComplete = false;
 
@@ -100,9 +96,7 @@ public class AgenticRouter
             {
 
                 Console.WriteLine();
-#pragma warning disable SKEXP0001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 Console.WriteLine($"{response.AuthorName.ToUpperInvariant()}:{Environment.NewLine}{response.Content}");
-#pragma warning restore SKEXP0001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 chatHistory.AddAssistantMessage(response.Content);
              
             }

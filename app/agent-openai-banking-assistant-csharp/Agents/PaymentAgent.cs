@@ -1,11 +1,10 @@
 ﻿
-using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.Agents;
-using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
+using Microsoft.Extensions.Logging;
+
 public class PaymentAgent
 {
     public ChatCompletionAgent agent;
-    public PaymentAgent(Kernel kernel, IConfiguration configuration, IDocumentScanner documentScanner)
+    public PaymentAgent(Kernel kernel, IConfiguration configuration, IDocumentScanner documentScanner, ILoggerFactory loggerFactory)
     {
         Kernel toolKernel = kernel.Clone();
 
@@ -31,10 +30,10 @@ public class PaymentAgent
            kernel: toolKernel,
            pluginName: "PaymentsPlugin",
            apiName: "payments",
-           apiUrl: paymentsApiURL
+        apiUrl: paymentsApiURL
         );
 
-        toolKernel.Plugins.AddFromObject(new InvoiceScanPlugin(documentScanner), "InvoiceScanPlugin");
+        toolKernel.Plugins.AddFromObject(new InvoiceScanPlugin(documentScanner, loggerFactory.CreateLogger<InvoiceScanPlugin>()), "InvoiceScanPlugin");
        
         this.agent =
         new()

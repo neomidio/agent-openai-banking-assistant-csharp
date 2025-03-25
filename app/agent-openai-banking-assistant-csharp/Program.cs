@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.Extensions.Azure;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,9 @@ else
 }
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddSingleton<ILoggerFactory>(LoggerFactory.Create(builder => builder.AddConsole()));
+
 
 // Use the custom extension method to register azure services.
 builder.Services.AddAzureServices(builder.Configuration);

@@ -8,6 +8,7 @@
     <RootNamespace>agent_openai_banking_assistant_csharp</RootNamespace>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
+	<NoWarn>$(NoWarn);CA2007;IDE1006;SKEXP0001;SKEXP0110;OPENAI001</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
