@@ -410,17 +410,9 @@ output AZURE_OPENAI_CHATGPT_MODEL string = chatGptModelName
 output AZURE_OPENAI_SERVICE string =  openAi.outputs.name
 output AZURE_OPENAI_RESOURCE_GROUP string = openAiResourceGroup.name 
 output AZURE_OPENAI_CHATGPT_DEPLOYMENT string = chatGptDeploymentName
-output AZURE_OPENAI_APIKEY string = openAi.outputs.key
-output AZURE_OPENAI_ENDPOINT string = openAi.outputs.endpoint
-
 
 output AZURE_DOCUMENT_INTELLIGENCE_SERVICE string = documentIntelligence.outputs.name
-output AZURE_DOCUMENT_INTELLIGENCE_SERVICE_ENDPOINT string = documentIntelligence.outputs.endpoint
-output AZURE_DOCUMENT_INTELLIGENCE_SERVICE_APIKEY string = documentIntelligence.outputs.key
 output AZURE_DOCUMENT_INTELLIGENCE_RESOURCE_GROUP string = documentIntelligenceResourceGroup.name
-
-
-
 
 output AZURE_STORAGE_ACCOUNT string = storage.outputs.name
 output AZURE_STORAGE_CONTAINER string = storageContainerName
