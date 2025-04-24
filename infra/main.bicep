@@ -169,20 +169,12 @@ module copilot 'app/copilot.bicep' = {
         value: openAi.outputs.endpoint
       }
       {
-        name: 'DOTNET_AzureOpenAI__ApiKey'
-        value: openAi.outputs.key
-      }
-      {
         name: 'DOTNET_AzureOpenAI__Deployment'
         value: chatGptDeploymentName
       }
       {
         name: 'DOTNET_DocumentIntelligence__Endpoint'
         value: documentIntelligence.outputs.endpoint
-      }
-      {
-        name: 'DOTNET_DocumentIntelligence__ApiKey'
-        value: documentIntelligence.outputs.key
       }
       {
         name: 'DOTNET_BackendAPIs__TransactionsApiUrl'
