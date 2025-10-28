@@ -30,8 +30,8 @@ module app '../shared/host/container-app-upsert.bicep' = {
     exists: exists
     containerAppsEnvironmentName: containerAppsEnvironmentName
     containerRegistryName: containerRegistryName
-    containerCpuCoreCount: '1.0'
-    containerMemory: '2.0Gi'
+    containerCpuCoreCount: '0.5'
+    containerMemory: '1.0Gi'
     targetPort: 8080
     external:false
     env: union(env, [
