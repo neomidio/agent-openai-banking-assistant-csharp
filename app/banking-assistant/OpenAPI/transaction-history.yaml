@@ -1,23 +1,23 @@
 openapi: 3.0.3
 info:
-  title: Transaction History and Reporting API
+  title: API de Historial y Reportes de Transacciones
   version: 1.0.0
 paths:
   /transactions/{accountid}:
     get:
-      summary: Get transactions list.
-      description: Gets the transactions lists. They can be filtered based on recipient name
+      summary: Obtener lista de transacciones.
+      description: Obtiene la lista de transacciones, con opción a filtrar por nombre del beneficiario
       operationId: getTransactionsByRecipientName
       parameters:
         - name: accountid
-          description: id of specific account.
+          description: Identificador de la cuenta.
           in: path
           required: true
           schema:
             type: integer
             example: 123456
         - name: recipient_name
-          description: Name of the payee, recipient
+          description: Nombre del beneficiario
           in: query
           required: false
           schema:
@@ -26,7 +26,7 @@ paths:
 
       responses:
         '200':
-          description: A list of transactions for a specific recipient
+          description: Lista de transacciones para un beneficiario específico
           content:
             application/json:
               schema:
@@ -35,11 +35,11 @@ paths:
                   $ref: '#/components/schemas/Transaction'
     post:
       operationId: notifyTransaction
-      summary: Notify the banking transaction so that it's being stored in the history
-      description: Notify the banking transaction so that it's being stored in the history
+      summary: Notificar una transacción bancaria para almacenarla en el historial
+      description: Notificar una transacción bancaria para almacenarla en el historial
       parameters:
         - name: accountid
-          description: id of specific account.
+          description: Identificador de la cuenta.
           in: path
           required: true
           schema:
@@ -47,18 +47,18 @@ paths:
             example: 123456
       requestBody:
         required: true
-        description: transaction to notify
+        description: Transacción a notificar
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Transaction'
       responses:
         '200':
-          description: Payment request submitted successfully
+          description: Transacción registrada exitosamente
         '400':
-          description: Invalid request body
+          description: Cuerpo de la solicitud inválido
         '500':
-          description: Internal server error
+          description: Error interno del servidor
 components:
   schemas:
     Transaction:
@@ -66,29 +66,29 @@ components:
       properties:
         id:
           type: string
-          description: 'The unique identifier for the transaction'
+          description: Identificador único de la transacción
         description:
           type: string
-          description: 'The description of the transaction which contains reason for the payment and other details'
+          description: Descripción de la transacción con el motivo del pago y otros detalles
         type:
           type: string
-          description: 'The transaction type expressed as income or outcome transaction'
+          description: Tipo de transacción expresado como ingreso o egreso
         recipientName:
           type: string
-          description: 'The name of the recipient'
+          description: Nombre del beneficiario
         recipientBankReference:
           type: string
-          description: 'The bank reference of the recipient'
+          description: Referencia bancaria del beneficiario
         accountId:
           type: string
-          description: 'The account ID associated with the transaction'
+          description: Identificador de la cuenta asociada a la transacción
         paymentType:
           type: string
-          description: 'The type of payment: creditcard, banktransfer, directdebit, visa, mastercard, paypal, etc.'
+          description: 'Tipo de pago: tarjeta de crédito, transferencia bancaria, débito directo, visa, mastercard, paypal, etc.'
         amount:
           type: string
-          description: 'The amount of the transaction'
+          description: Monto de la transacción
         timestamp:
           type: string
           format: date-time
-          description: 'The timestamp of the transaction'
+          description: Marca de tiempo de la transacción

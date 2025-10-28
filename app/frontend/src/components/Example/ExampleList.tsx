@@ -8,9 +8,9 @@ export type ExampleModel = {
 };
 
 const EXAMPLES: ExampleModel[] = [
-    { text: "I want to pay a bill", value: "I want to pay a bill"},
-    { text: "what are this year payments ?", value: "what are this year payments ?" },
-    { text: "What is the limit on my visa ?", value: "What is the limit on my visa ?" }
+    { text: "Quiero pagar el recibo de electricidad", value: "Quiero pagar el recibo de electricidad"},
+    { text: "¿Qué pagos hice este mes?", value: "¿Qué pagos hice este mes?" },
+    { text: "¿Cuál es el cupo disponible de mi tarjeta Visa?", value: "¿Cuál es el cupo disponible de mi tarjeta Visa?" }
 ];
 
 interface Props {

@@ -40,27 +40,27 @@ public class PaymentService : IPaymentService
     {
         // Validate AccountId
         if (string.IsNullOrEmpty(payment.AccountId))
-            throw new ArgumentException("AccountId is empty or null");
+            throw new ArgumentException("El identificador de cuenta está vacío o es nulo");
 
         if (!int.TryParse(payment.AccountId, out _))
-            throw new ArgumentException("AccountId is not a valid number");
+            throw new ArgumentException("El identificador de cuenta no es un número válido");
 
         // Validate PaymentMethodId
         if (payment.PaymentType?.ToLower() != "transfer" &&
             string.IsNullOrEmpty(payment.PaymentMethodId))
-            throw new ArgumentException("paymentMethodId is empty or null");
+            throw new ArgumentException("paymentMethodId está vacío o es nulo");
 
         if (!string.IsNullOrEmpty(payment.PaymentMethodId) && !int.TryParse(payment.PaymentMethodId, out _))
-            throw new ArgumentException("paymentMethodId is not a valid number");
+            throw new ArgumentException("paymentMethodId no es un número válido");
 
         // Log payment details
-        _logger.LogInformation($"Payment successful for: {payment}");
+        _logger.LogInformation($"Pago exitoso para: {payment}");
 
         // Convert Payment to Transaction
         var transaction = ConvertPaymentToTransaction(payment);
 
         // Send transaction to API
-        _logger.LogInformation($"Notifying payment [{payment.Description}] for account[{transaction.AccountId}]");
+        _logger.LogInformation($"Notificando el pago [{payment.Description}] para la cuenta [{transaction.AccountId}]");
 
         try
         {
@@ -78,7 +78,7 @@ public class PaymentService : IPaymentService
         {
             _logger.LogError(
                 ex,
-                "Error notifying transaction for account {AccountId}",
+                "Error al notificar la transacción para la cuenta {AccountId}",
                 payment.AccountId
             );
             throw;

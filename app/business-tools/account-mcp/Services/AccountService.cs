@@ -11,49 +11,49 @@
         // Fill the dictionary with dummy data
         _accounts["1000"] = new Account(
             "1000",
-            "alice.user@contoso.com",
-            "Alice User",
+            "alicia.usuario@contoso.com",
+            "Alicia Usuaria",
             "USD",
             "2022-01-01",
             "5000",
             new List<PaymentMethodSummary>
             {
                     new PaymentMethodSummary("12345", "Visa", "2022-01-01", "2025-01-01"),
-                    new PaymentMethodSummary("23456", "BankTransfer", "2022-01-01", "9999-01-01")
+                    new PaymentMethodSummary("23456", "TransferenciaBancaria", "2022-01-01", "9999-01-01")
             }
         );
 
         _accounts["1010"] = new Account(
             "1010",
-            "bob.user@contoso.com",
-            "Bob User",
+            "carlos.usuario@contoso.com",
+            "Carlos Usuario",
             "EUR",
             "2022-01-01",
             "10000",
             new List<PaymentMethodSummary>
             {
-                    new PaymentMethodSummary("345678", "BankTransfer", "2022-01-01", "9999-01-01"),
+                    new PaymentMethodSummary("345678", "TransferenciaBancaria", "2022-01-01", "9999-01-01"),
                     new PaymentMethodSummary("55555", "Visa", "2022-01-01", "2026-01-01")
             }
         );
 
         _accounts["1020"] = new Account(
             "1020",
-            "charlie.user@contoso.com",
-            "Charlie User",
+            "valeria.usuario@contoso.com",
+            "Valeria Usuaria",
             "EUR",
             "2022-01-01",
             "3000",
             new List<PaymentMethodSummary>
             {
-                    new PaymentMethodSummary("46748576", "DirectDebit", "2022-02-01", "9999-02-01")
+                    new PaymentMethodSummary("46748576", "DébitoDirecto", "2022-02-01", "9999-02-01")
             }
         );
 
         _paymentMethods["12345"] = new PaymentMethod("12345", "Visa", "2022-01-01", "2025-01-01", "500.00", "1234567812345678");
         _paymentMethods["55555"] = new PaymentMethod("55555", "Visa", "2024-01-01", "2028-01-01", "350.00", "637362551913266");
-        _paymentMethods["23456"] = new PaymentMethod("23456", "BankTransfer", "2022-01-01", "9999-01-01", "5000.00", null);
-        _paymentMethods["345678"] = new PaymentMethod("345678", "BankTransfer", "2022-01-01", "9999-01-01", "10000.00", null);
+        _paymentMethods["23456"] = new PaymentMethod("23456", "TransferenciaBancaria", "2022-01-01", "9999-01-01", "5000.00", null);
+        _paymentMethods["345678"] = new PaymentMethod("345678", "TransferenciaBancaria", "2022-01-01", "9999-01-01", "10000.00", null);
     }
 
     /// <summary>
@@ -80,8 +80,8 @@
         // Return dummy list of beneficiaries
         var beneficiaries = new List<Beneficiary>
             {
-                new Beneficiary("1", "Mike ThePlumber", "123456789", "Intesa Sanpaolo"),
-                new Beneficiary("2", "Jane TheElectrician", "987654321", "UBS")
+                new Beneficiary("1", "Miguel ElPlomero", "123456789", "Banco Andino"),
+                new Beneficiary("2", "Juana LaElectricista", "987654321", "Banco del Sol")
             };
         return await Task.FromResult(beneficiaries);
     }
@@ -91,10 +91,10 @@
     private void ValidateAccountId(string accountId)
     {
         if (string.IsNullOrEmpty(accountId))
-            throw new ArgumentException("AccountId is empty or null");
+            throw new ArgumentException("El identificador de cuenta está vacío o es nulo");
 
         if (!int.TryParse(accountId, out _))
-            throw new ArgumentException("AccountId is not a valid number");
+            throw new ArgumentException("El identificador de cuenta no es un número válido");
     }
 }
 
