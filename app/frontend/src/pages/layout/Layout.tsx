@@ -11,7 +11,7 @@ const Layout = () => {
             <header className={styles.header} role={"banner"}>
                 <div className={styles.headerContainer}>
                     <Link to="/" className={styles.headerTitleContainer}>
-                        <h3 className={styles.headerTitle}>Agents .NET Sample</h3>
+                        <h3 className={styles.headerTitle}>Ejemplo de Agentes .NET</h3>
                     </Link>
                     <nav>
                         <ul className={styles.headerNavList}>
@@ -22,11 +22,11 @@ const Layout = () => {
                             </li>
 
                             <li className={styles.headerNavLeftMargin}>
-                                <a href="https://github.com/dminkovski/agent-openai-banking-assistant-csharp" target={"_blank"} title="Github repository link">
+                                <a href="https://github.com/dminkovski/agent-openai-banking-assistant-csharp" target={"_blank"} title="Enlace al repositorio de GitHub">
                                     <img
                                         src={github}
-                                        alt="Github logo"
-                                        aria-label="Link to github repository"
+                                        alt="Logo de GitHub"
+                                        aria-label="Enlace al repositorio de GitHub"
                                         width="20px"
                                         height="20px"
                                         className={styles.githubLogo}
@@ -35,7 +35,7 @@ const Layout = () => {
                             </li>
                         </ul>
                     </nav>
-                    <h4 className={styles.headerRightText}>Banking Assistance Copilot</h4>
+                    <h4 className={styles.headerRightText}>Copiloto de Asistencia Bancaria</h4>
                     {useLogin && <LoginButton />}
                 </div>
             </header>
