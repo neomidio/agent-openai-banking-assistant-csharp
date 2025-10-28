@@ -46,7 +46,7 @@ param openAiResourceGroupName string = ''
   'switzerlandnorth'
   'uksouth'
   'westeurope'
-  'westu'
+  'westus'
   'westus3'
 ])
 @metadata({
