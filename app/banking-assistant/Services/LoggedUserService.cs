@@ -8,7 +8,7 @@ public class LoggedUserService : IUserService
 
     private LoggedUser GetDefaultUser()
     {
-        return new LoggedUser("bob.user@contoso.com", "bob.user@contoso.com", "generic", "Bob The User");
+        return new LoggedUser("carlos.usuario@contoso.com", "carlos.usuario@contoso.com", "generic", "Carlos El Usuario");
     }
 }
 

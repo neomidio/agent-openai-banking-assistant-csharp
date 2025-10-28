@@ -28,12 +28,20 @@ module app '../shared/host/container-app-upsert.bicep' = {
     containerRegistryName: containerRegistryName
     env: [
       {
+        name: 'REACT_APP_API_BASE_URL'
+        value: apiBaseUrl
+      }
+      {
+        name: 'VITE_BACKEND_URI'
+        value: apiBaseUrl
+      }
+      {
         name: 'REACT_APP_APPLICATIONINSIGHTS_CONNECTION_STRING'
         value: applicationInsights.properties.ConnectionString
       }
       {
-        name: 'REACT_APP_API_BASE_URL'
-        value: apiBaseUrl
+        name: 'VITE_APPLICATIONINSIGHTS_CONNECTION_STRING'
+        value: applicationInsights.properties.ConnectionString
       }
       {
         name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'

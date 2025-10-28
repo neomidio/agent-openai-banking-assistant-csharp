@@ -46,7 +46,7 @@ param openAiResourceGroupName string = ''
   'switzerlandnorth'
   'uksouth'
   'westeurope'
-  'westu'
+  'westus'
   'westus3'
 ])
 @metadata({
@@ -60,7 +60,7 @@ param customOpenAiResourceGroupLocation string = ''
 param openAiSkuName string = 'S0'
 param openAiDeploymentCapacity int = 30
 param chatGptDeploymentName string // Set in main.parameters.json
-param chatGptDeploymentCapacity int = 60
+param chatGptDeploymentCapacity int = 30
 param chatGptDeploymentSkuName string= 'Standard'
 param chatGptModelName string = 'gpt-4o-mini'
 param chatGptModelVersion string = '2024-07-18'
@@ -70,7 +70,7 @@ param documentIntelligenceResourceGroupName string = ''
 //Document Intelligence new rest api available in eastus, westus2, westeurope. https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/sdk-overview-v4-0?view=doc-intel-4.0.0&tabs=csharp
 @allowed(['eastus', 'westus2', 'westeurope'])
 param documentIntelligenceResourceGroupLocation string = 'eastus'
-param documentIntelligenceSkuName string = 'S0'
+param documentIntelligenceSkuName string = 'F0'
 
 param containerAppsEnvironmentName string = ''
 param containerRegistryName string = ''
