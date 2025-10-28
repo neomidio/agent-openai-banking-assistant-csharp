@@ -58,7 +58,6 @@ param openAiResourceGroupLocation string = 'eastus'
 param customOpenAiResourceGroupLocation string = ''
 
 param openAiSkuName string = 'S0'
-param openAiDeploymentCapacity int = 30
 param chatGptDeploymentName string // Set in main.parameters.json
 param chatGptDeploymentCapacity int = 30
 param chatGptDeploymentSkuName string= 'Standard'
@@ -91,7 +90,7 @@ param useApplicationInsights bool = false
 
 var abbrs = loadJsonContent('shared/abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
-var tags = { 'azd-env-name': environmentName, 'assignedTo': environmentName }
+var tags = { 'azd-env-name': environmentName, assignedTo: environmentName }
 
 // Organize resources in a resource group
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {

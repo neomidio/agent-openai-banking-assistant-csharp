@@ -34,11 +34,6 @@ resource applicationInsightsDashboard 'Microsoft.Portal/dashboards@2020-09-01-pr
               ]
               #disable-next-line BCP036
               type: 'Extension/AppInsightsExtension/PartType/AspNetOverviewPinnedPart'
-              asset: {
-                idInputName: 'id'
-                type: 'ApplicationInsights'
-              }
-              defaultMenuItemId: 'overview'
             }
           }
           {
@@ -65,11 +60,6 @@ resource applicationInsightsDashboard 'Microsoft.Portal/dashboards@2020-09-01-pr
               ]
               #disable-next-line BCP036
               type: 'Extension/AppInsightsExtension/PartType/ProactiveDetectionAsyncPart'
-              asset: {
-                idInputName: 'ComponentId'
-                type: 'ApplicationInsights'
-              }
-              defaultMenuItemId: 'ProactiveDetection'
             }
           }
           {
@@ -96,10 +86,6 @@ resource applicationInsightsDashboard 'Microsoft.Portal/dashboards@2020-09-01-pr
               ]
               #disable-next-line BCP036
               type: 'Extension/AppInsightsExtension/PartType/QuickPulseButtonSmallPart'
-              asset: {
-                idInputName: 'ComponentId'
-                type: 'ApplicationInsights'
-              }
             }
           }
           {
@@ -137,10 +123,6 @@ resource applicationInsightsDashboard 'Microsoft.Portal/dashboards@2020-09-01-pr
               ]
               #disable-next-line BCP036
               type: 'Extension/AppInsightsExtension/PartType/AvailabilityNavButtonPart'
-              asset: {
-                idInputName: 'ComponentId'
-                type: 'ApplicationInsights'
-              }
             }
           }
           {
@@ -178,10 +160,6 @@ resource applicationInsightsDashboard 'Microsoft.Portal/dashboards@2020-09-01-pr
               ]
               #disable-next-line BCP036
               type: 'Extension/AppInsightsExtension/PartType/AppMapButtonPart'
-              asset: {
-                idInputName: 'ComponentId'
-                type: 'ApplicationInsights'
-              }
             }
           }
           {
@@ -236,10 +214,6 @@ resource applicationInsightsDashboard 'Microsoft.Portal/dashboards@2020-09-01-pr
               ]
               #disable-next-line BCP036
               type: 'Extension/AppInsightsExtension/PartType/UsageUsersOverviewPart'
-              asset: {
-                idInputName: 'ComponentId'
-                type: 'ApplicationInsights'
-              }
             }
           }
           {
@@ -298,12 +272,6 @@ resource applicationInsightsDashboard 'Microsoft.Portal/dashboards@2020-09-01-pr
               ]
               #disable-next-line BCP036
               type: 'Extension/AppInsightsExtension/PartType/CuratedBladeFailuresPinnedPart'
-              isAdapter: true
-              asset: {
-                idInputName: 'ResourceId'
-                type: 'ApplicationInsights'
-              }
-              defaultMenuItemId: 'failures'
             }
           }
           {
@@ -362,12 +330,6 @@ resource applicationInsightsDashboard 'Microsoft.Portal/dashboards@2020-09-01-pr
               ]
               #disable-next-line BCP036
               type: 'Extension/AppInsightsExtension/PartType/CuratedBladePerformancePinnedPart'
-              isAdapter: true
-              asset: {
-                idInputName: 'ResourceId'
-                type: 'ApplicationInsights'
-              }
-              defaultMenuItemId: 'performance'
             }
           }
           {
@@ -453,11 +415,6 @@ resource applicationInsightsDashboard 'Microsoft.Portal/dashboards@2020-09-01-pr
               ]
               #disable-next-line BCP036
               type: 'Extension/AppInsightsExtension/PartType/MetricsExplorerBladePinnedPart'
-              asset: {
-                idInputName: 'ComponentId'
-                type: 'ApplicationInsights'
-              }
-              defaultMenuItemId: 'browser'
             }
           }
           {
