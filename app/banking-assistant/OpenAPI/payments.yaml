@@ -1,27 +1,27 @@
 openapi: 3.0.3
 info:
-  title: Payment API
+  title: API de Pagos
   version: 1.0.0
 paths:
   /payments:
     post:
       operationId: submitPayment
-      summary: Submit a payment request
-      description: Submit a payment request
+      summary: Enviar una solicitud de pago
+      description: Enviar una solicitud de pago
       requestBody:
         required: true
-        description: Payment to submit
+        description: Pago a enviar
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Payment'
       responses:
         '200':
-          description: Payment request submitted successfully
+          description: Solicitud de pago enviada correctamente
         '400':
-          description: Invalid request body
+          description: Cuerpo de la solicitud inválido
         '500':
-          description: Internal server error
+          description: Error interno del servidor
 components:
   schemas:
     Payment:
@@ -29,32 +29,32 @@ components:
       properties:
         description:
           type: string
-          description: Description of the payment
+          description: Descripción del pago
         recipientName:
           type: string
-          description: Name of the recipient
+          description: Nombre del beneficiario
         recipientBankCode:
           type: string
-          description: Bank code of the recipient
+          description: Código bancario del beneficiario
         accountId:
           type: string
-          description: ID of the account
+          description: Identificador de la cuenta
         paymentMethodId:
           type: string
-          description: ID of the payment method
+          description: Identificador del método de pago
         paymentType:
           type: string
-          description: 'The type of payment: creditcard, banktransfer, directdebit, visa, mastercard, paypal, etc.'
+          description: 'Tipo de pago: tarjeta de crédito, transferencia bancaria, débito directo, visa, mastercard, paypal, etc.'
         amount:
           type: string
-          description: Amount of the payment
+          description: Monto del pago
         timestamp:
           type: string
-          description: Timestamp of the payment
+          description: Marca de tiempo del pago
   requestBodies:
     Payment:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Payment'
-      description: Payment object to submit
+      description: Objeto de pago a enviar
