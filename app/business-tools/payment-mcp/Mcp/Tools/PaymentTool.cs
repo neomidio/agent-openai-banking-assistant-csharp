@@ -23,8 +23,8 @@ public class PaymentTool
     /// Submits a payment request asynchronously.
     /// </summary>
     /// <param name="payment">Payment information.</param>
-    [McpServerTool(Name = "SubmitPayment"), Description("Submit a payment request.")]
-    public async Task<string> SubmitPaymentAsync([Description("Payment to submit.")]Payment payment)
+    [McpServerTool(Name = "SubmitPayment"), Description("Enviar una solicitud de pago.")]
+    public async Task<string> SubmitPaymentAsync([Description("Pago a enviar.")]Payment payment)
     {
 
         _logger.LogInformation("Received payment request: {Payment}", payment);
@@ -32,19 +32,19 @@ public class PaymentTool
         try
         {
             await _paymentService.ProcessPaymentAsync(payment);
-            return "Payment processed successfully.";
+            return "Pago procesado correctamente.";
         }
         catch (ArgumentException ex)
         {
             Console.WriteLine(ex.Message);
-            _logger.LogWarning(ex, "Invalid payment request");
-            return "Invalid payment request.";
+            _logger.LogWarning(ex, "Solicitud de pago inválida");
+            return "Solicitud de pago inválida.";
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            _logger.LogError(ex, "Error processing payment");
-            return "Error processing payment.";
+            _logger.LogError(ex, "Error al procesar el pago");
+            return "Error al procesar el pago.";
         }
     }
 }

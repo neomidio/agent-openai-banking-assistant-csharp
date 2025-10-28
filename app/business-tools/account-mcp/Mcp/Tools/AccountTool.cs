@@ -16,10 +16,10 @@ public class AccountTool
     /// </summary>
     /// <param name="accountId">The ID of the specific account.</param>
     /// <returns>A task representing the asynchronous operation, containing the account details.</returns>
-    [McpServerTool(Name = "GetAccountDetails"), Description("Get account details and available payment methods.")]
-    public async Task<Account> GetAccountDetailsAsync([Description("id of specific account.")] string accountId)
+    [McpServerTool(Name = "GetAccountDetails"), Description("Obtener detalles de la cuenta y métodos de pago disponibles.")]
+    public async Task<Account> GetAccountDetailsAsync([Description("Identificador de la cuenta.")] string accountId)
     {
-        _logger.LogInformation("Received request to get account details for account id: {AccountId}", accountId);
+        _logger.LogInformation("Solicitud recibida para obtener detalles de la cuenta: {AccountId}", accountId);
         return await _accountService.GetAccountDetailsAsync(accountId);
     }
 
@@ -29,12 +29,12 @@ public class AccountTool
     /// <param name="accountId">The ID of the specific account.</param>
     /// <param name="methodId">The ID of the specific payment method available for the account.</param>
     /// <returns>A task representing the asynchronous operation, containing the payment method details.</returns>
-    [McpServerTool(Name = "GetPaymentMethodDetails"), Description("Get payment method detail with available balance.")]
+    [McpServerTool(Name = "GetPaymentMethodDetails"), Description("Obtener detalle del método de pago con saldo disponible.")]
     public async Task<PaymentMethod> GetPaymentMethodDetailsAsync(
-        [Description("id of specific account.")] string accountId,
-        [Description("id of specific payment method available for the account id.")] string methodId)
+        [Description("Identificador de la cuenta.")] string accountId,
+        [Description("Identificador del método de pago disponible para la cuenta.")] string methodId)
     {
-        _logger.LogInformation("Received request to get payment method details for account id: {AccountId} and method id: {MethodId}",
+        _logger.LogInformation("Solicitud recibida para obtener detalles del método de pago de la cuenta {AccountId} y método {MethodId}",
             accountId, methodId);
         return await _accountService.GetPaymentMethodDetailsAsync(methodId);
     }
@@ -44,10 +44,10 @@ public class AccountTool
     /// </summary>
     /// <param name="accountId">The ID of the specific account.</param>
     /// <returns>A task representing the asynchronous operation, containing the list of beneficiaries.</returns>
-    [McpServerTool(Name = "GetBeneficiaryDetails"), Description("Get list of registered beneficiaries for a specific account.")]
-    public async Task<List<Beneficiary>> GetBeneficiaryDetailsAsync([Description("id of specific account.")] string accountId)
+    [McpServerTool(Name = "GetBeneficiaryDetails"), Description("Obtener la lista de beneficiarios registrados para una cuenta específica.")]
+    public async Task<List<Beneficiary>> GetBeneficiaryDetailsAsync([Description("Identificador de la cuenta.")] string accountId)
     {
-        _logger.LogInformation("Received request to get beneficiary details for account id: {AccountId}", accountId);
+        _logger.LogInformation("Solicitud recibida para obtener beneficiarios de la cuenta: {AccountId}", accountId);
         return await _accountService.GetRegisteredBeneficiaryAsync(accountId);
     }
 }
