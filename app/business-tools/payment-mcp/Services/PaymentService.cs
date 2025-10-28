@@ -50,7 +50,7 @@ public class PaymentService : IPaymentService
             string.IsNullOrEmpty(payment.PaymentMethodId))
             throw new ArgumentException("paymentMethodId is empty or null");
 
-        if (!int.TryParse(payment.PaymentMethodId, out _))
+        if (!string.IsNullOrEmpty(payment.PaymentMethodId) && !int.TryParse(payment.PaymentMethodId, out _))
             throw new ArgumentException("paymentMethodId is not a valid number");
 
         // Log payment details
